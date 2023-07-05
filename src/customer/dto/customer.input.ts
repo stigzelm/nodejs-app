@@ -60,3 +60,12 @@ export class UpdateCustomerInput {
   @Field(() => String, { nullable: true })
   password?: string;
 }
+
+@InputType()
+export class DeleteCustomerInput {
+  @Field(() => String, { nullable: true })
+  id?: string;
+
+  @Field(() => String, { nullable: true })
+  email?: string;
+}

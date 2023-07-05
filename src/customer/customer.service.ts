@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { GetCustomersInput, GetCustomerInput, CreateCustomerInput, UpdateCustomerInput } from './dto/customer.input';
+import { GetCustomersInput, GetCustomerInput, CreateCustomerInput, UpdateCustomerInput, DeleteCustomerInput } from './dto/customer.input';
 
 @Injectable()
 export class CustomerService {
@@ -28,10 +28,9 @@ export class CustomerService {
   // Create customer
   async create(newCustomer: CreateCustomerInput) {
 
-    const { email } = newCustomer;
     const existingCustomer = await this.prisma.customer.findUnique({
       where: {
-        email
+        email: newCustomer.email
       }
     });
     if (existingCustomer) {
@@ -41,16 +40,28 @@ export class CustomerService {
     return this.prisma.customer.create({ data: newCustomer });
   }
 
-    // Update customer
-    async update(params: UpdateCustomerInput) {
+  // Update customer
+  async update(params: UpdateCustomerInput) {
 
-      const { id } = params;
-      const customer = await this.findOne({ id });
+    const { id } = params;
+    const customer = await this.findOne({ id });
 
-      return this.prisma.customer.update({ 
-        data: params, 
-        where: {
-          id: customer.id
-      } });
-    }
+    return this.prisma.customer.update({ 
+      data: params, 
+      where: {
+        id: customer.id
+      }
+    });
+  }
+
+  // Delete customer
+  async delete(params: DeleteCustomerInput) {
+    const customer = await this.findOne(params);
+
+    return this.prisma.customer.delete({
+      where: {
+        id: customer.id
+      }
+    })
+  }
 }
