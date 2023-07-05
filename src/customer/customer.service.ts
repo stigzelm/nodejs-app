@@ -18,7 +18,7 @@ export class CustomerService {
     });
 
     if (!customer) {
-      throw new NotFoundException();
+      throw new NotFoundException('Customer not found');
     }
 
     return customer;
