@@ -1,10 +1,13 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { LoginInput } from './dto/auth.input';
-
+import { LoginInput, RegisterInput } from './dto/auth.input';
+import { CustomerService } from 'src/customer/customer.service';
 @Injectable()
 export class AuthService {
-    constructor(private prisma: PrismaService) {}
+    constructor(
+        private prisma: PrismaService,
+        private readonly customerService: CustomerService
+    ) {}
 
     async login(params: LoginInput) {
         const { email, password } = params;
@@ -27,5 +30,13 @@ export class AuthService {
         const refreshToken = "refreshToken-comes-here";
 
         return { accessToken, refreshToken };
+    }
+
+    async register(params: RegisterInput) {
+        await this.customerService.create(params);
+
+        return {
+            message: "Register successfully"
+        }
     }
 }

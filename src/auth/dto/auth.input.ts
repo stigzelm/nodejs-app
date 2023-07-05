@@ -17,3 +17,18 @@ export class LoginOutput {
   @Field(() => String)
   refreshToken: string;
 }
+
+@InputType()
+export class RegisterInput {
+  @Field(() => String, { nullable: true })
+  email: string;
+
+  @Field(() => String, { nullable: true })
+  password: string;
+}
+
+@ObjectType()
+export class RegisterOutput {
+  @Field(() => String)
+  message: string;
+}
