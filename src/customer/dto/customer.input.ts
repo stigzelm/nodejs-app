@@ -17,7 +17,7 @@ export class WhereCustomerInput {
 }
 
 @InputType()
-export class GetCustomerInput {
+export class GetCustomersInput {
   @Field(() => String, { nullable: true })
   cursor?: Prisma.CustomerWhereUniqueInput;
 
@@ -29,4 +29,43 @@ export class GetCustomerInput {
 
   @Field(() => WhereCustomerInput, { nullable: true })
   where: WhereCustomerInput;
+}
+
+@InputType()
+export class GetCustomerInput {
+  @Field(() => String, { nullable: true })
+  id?: string;
+
+  @Field(() => String, { nullable: true })
+  email?: string;
+}
+
+@InputType()
+export class CreateCustomerInput {
+  @Field(() => String, { nullable: true })
+  email: string;
+
+  @Field(() => String, { nullable: true })
+  password: string;
+}
+
+@InputType()
+export class UpdateCustomerInput {
+  @Field(() => String, { nullable: true })
+  id: string;
+
+  @Field(() => String, { nullable: true })
+  email?: string;
+
+  @Field(() => String, { nullable: true })
+  password?: string;
+}
+
+@InputType()
+export class DeleteCustomerInput {
+  @Field(() => String, { nullable: true })
+  id?: string;
+
+  @Field(() => String, { nullable: true })
+  email?: string;
 }
