@@ -19,10 +19,11 @@ type Customer {
 scalar Timestamp
 
 type Query {
-  customers(data: GetCustomerInput!): [Customer!]!
+  customers(data: GetCustomersInput!): [Customer!]!
+  customer(data: GetCustomerInput!): Customer!
 }
 
-input GetCustomerInput {
+input GetCustomersInput {
   cursor: String
   skip: Int
   take: Int
@@ -34,4 +35,9 @@ input WhereCustomerInput {
   email: String
   createdAt: Timestamp
   updatedAt: Timestamp
+}
+
+input GetCustomerInput {
+  id: String
+  email: String
 }
