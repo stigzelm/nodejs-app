@@ -41,3 +41,12 @@ input GetCustomerInput {
   id: String
   email: String
 }
+
+type Mutation {
+  createCustomer(data: CreateCustomerInput!): Customer!
+}
+
+input CreateCustomerInput {
+  email: String
+  password: String
+}
