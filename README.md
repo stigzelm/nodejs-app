@@ -55,3 +55,9 @@ $ npm run start
 $ npm run start:dev
 
 ```
+
+
+## Tools
+
+Access the swagger documentation by going to the url: http://localhost:8080/api
+Access the GraphQL playground by going to the url: http://localhost:8080/graphql
