@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { GetCustomersInput, GetCustomerInput, CreateCustomerInput } from './dto/customer.input';
+import { GetCustomersInput, GetCustomerInput, CreateCustomerInput, UpdateCustomerInput } from './dto/customer.input';
 
 @Injectable()
 export class CustomerService {
@@ -40,4 +40,17 @@ export class CustomerService {
     
     return this.prisma.customer.create({ data: newCustomer });
   }
+
+    // Update customer
+    async update(params: UpdateCustomerInput) {
+
+      const { id } = params;
+      const customer = await this.findOne({ id });
+
+      return this.prisma.customer.update({ 
+        data: params, 
+        where: {
+          id: customer.id
+      } });
+    }
 }
