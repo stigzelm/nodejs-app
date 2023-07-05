@@ -18,6 +18,11 @@ type Customer {
 """
 scalar Timestamp
 
+type LoginOutput {
+  accessToken: String!
+  refreshToken: String!
+}
+
 type Query {
   customers(data: GetCustomersInput!): [Customer!]!
   customer(data: GetCustomerInput!): Customer!
@@ -46,6 +51,7 @@ type Mutation {
   createCustomer(data: CreateCustomerInput!): Customer!
   updateCustomer(data: UpdateCustomerInput!): Customer!
   deleteCustomer(data: DeleteCustomerInput!): Customer!
+  login(data: LoginInput!): LoginOutput!
 }
 
 input CreateCustomerInput {
@@ -62,4 +68,9 @@ input UpdateCustomerInput {
 input DeleteCustomerInput {
   id: String
   email: String
+}
+
+input LoginInput {
+  email: String
+  password: String
 }
