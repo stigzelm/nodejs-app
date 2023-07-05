@@ -9,18 +9,21 @@ export class CustomerResolver {
 
   // Get a list of customers
   @Query(() => [Customer])
-  async customers(@Args('data') { skip, take, where }: GetCustomersInput) {
-    return this.customerService.findAll({ skip, take, where });
+  async customers(@Args('data') data?: GetCustomersInput) {
+    return this.customerService.findAll(data);
   }
 
   // Get one customer by id or email
   @Query(() => Customer)
-  async customer(@Args('data') { id, email }: GetCustomerInput ) {
-    return this.customerService.findOne({ id, email });
+  async customer(@Args('data') data: GetCustomerInput ) {
+    return this.customerService.findOne(data);
   }
 
   // Update customer by id or email
 
+  // Delete customer by id or email
+
   // Create customer by id or email
+
   
 }

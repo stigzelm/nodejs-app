@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { GetCustomersInput, GetCustomerInput } from './dto/customer.input';
+import { GetCustomersInput, GetCustomerInput, CreateCustomerInput } from './dto/customer.input';
 
 @Injectable()
 export class CustomerService {
@@ -8,26 +8,15 @@ export class CustomerService {
 
   // Find multiple customers
   async findAll(params: GetCustomersInput) {
-    const { skip, take, cursor, where } = params;
-
-    return this.prisma.customer.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-    });
+    return this.prisma.customer.findMany(params);
   }
 
   // Find one customer
   async findOne(params: GetCustomerInput) {
-    const { id, email } = params;
     const customer = await this.prisma.customer.findUnique({
-      where: {
-        id,
-        email
-      }
+      where: params
     });
-    
+
     if (!customer) {
       throw new NotFoundException();
     }
