@@ -62,3 +62,4 @@ $ npm run start:dev
 Access the swagger documentation by going to the url: http://localhost:8080/api
 Access the GraphQL playground by going to the url: http://localhost:8080/graphql
 Start the UI for the prisma database with the command: npx prisma studio
+To check the emails beeing sent, go to https://www.smtpbucket.com/
