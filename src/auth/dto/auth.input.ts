@@ -39,3 +39,19 @@ export class RegisterOutput {
   @Field(() => String)
   message: string;
 }
+
+@InputType()
+export class RfTokenInput {
+  @IsNotEmpty()
+  @Field(() => String)
+  refreshToken: string;
+}
+
+@ObjectType()
+export class RfTokenOutput {
+  @Field(() => String)
+  accessToken: string;
+
+  @Field(() => String)
+  refreshToken: string;
+}
