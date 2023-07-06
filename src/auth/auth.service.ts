@@ -75,6 +75,34 @@ export class AuthService {
         }
     }
 
+    async verify(verificationCode: string) {
+        const codeData = await this.jwt.verifyAsync(verificationCode, {
+            secret: process.env.JWT_SECRET
+        });
+        
+        const customer = await this.prisma.customer.findUnique({
+            where: {
+                email: codeData.email
+            }
+        });
+
+        if (!customer) {
+            throw new UnauthorizedException();
+        }
+
+        await this.prisma.customer.update({
+            where: {
+                id: customer.id
+            },
+            data: {
+                verified: true
+            }
+        });
+
+        return "Account is now activated. You can now login using your credentials.";
+        
+    }
+
     async refreshToken(params: RfTokenInput) {
         try {
             const {refreshToken} = params;
