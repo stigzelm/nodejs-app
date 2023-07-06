@@ -1,11 +1,14 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { LoginInput, RegisterInput } from './dto/auth.input';
 import { CustomerService } from 'src/customer/customer.service';
+import { JwtService } from '@nestjs/jwt';
+
 @Injectable()
 export class AuthService {
     constructor(
         private prisma: PrismaService,
+        private jwt: JwtService,
         private readonly customerService: CustomerService
     ) {}
 
@@ -26,8 +29,9 @@ export class AuthService {
             throw new UnauthorizedException();
         }
 
-        const accessToken = "accessToken-comes-here";
-        const refreshToken = "refreshToken-comes-here";
+        const payload = {sub: customer.id, email: customer.email};
+        const accessToken = await this.generateAccessToken(payload);
+        const refreshToken = await this.generateRefreshToken(payload);
 
         return { accessToken, refreshToken };
     }
@@ -38,5 +42,19 @@ export class AuthService {
         return {
             message: "Register successfully"
         }
+    }
+
+    async generateAccessToken(payload: { sub: string, email: string }): Promise<string> {
+        return this.jwt.signAsync(payload, {
+          secret: process.env.JWT_SECRET,
+          expiresIn: '15m'
+        });
+    }
+
+    async generateRefreshToken(payload: { sub: string, email: string }): Promise<string> {
+        return this.jwt.signAsync(payload, {
+          secret: process.env.JWT_SECRET,
+          expiresIn: '7d'
+        });
     }
 }
