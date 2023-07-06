@@ -50,6 +50,11 @@ export class CustomerService {
     const { id } = params;
     const customer = await this.findOne({ id });
 
+    if ('password' in params) {
+      const hashedPassword = await bcrypt.hash(params.password, 10);
+      params.password = hashedPassword;
+    }
+
     return this.prisma.customer.update({ 
       data: params, 
       where: {
