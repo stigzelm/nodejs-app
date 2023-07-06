@@ -18,6 +18,20 @@ type Customer {
 """
 scalar Timestamp
 
+type LoginOutput {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type RegisterOutput {
+  message: String!
+}
+
+type RfTokenOutput {
+  accessToken: String!
+  refreshToken: String!
+}
+
 type Query {
   customers(data: GetCustomersInput!): [Customer!]!
   customer(data: GetCustomerInput!): Customer!
@@ -43,9 +57,26 @@ input GetCustomerInput {
 }
 
 type Mutation {
+  login(data: LoginInput!): LoginOutput!
+  register(data: RegisterInput!): RegisterOutput!
+  refreshToken(data: RfTokenInput!): RfTokenOutput!
   createCustomer(data: CreateCustomerInput!): Customer!
   updateCustomer(data: UpdateCustomerInput!): Customer!
   deleteCustomer(data: DeleteCustomerInput!): Customer!
+}
+
+input LoginInput {
+  email: String
+  password: String
+}
+
+input RegisterInput {
+  email: String
+  password: String
+}
+
+input RfTokenInput {
+  refreshToken: String!
 }
 
 input CreateCustomerInput {

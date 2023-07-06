@@ -9,13 +9,13 @@ There is some key features that must be implemented in the recruitment task:
 
 - login and signup operations for customers;
 
-- roles USER and ADMIN;
-
 - access token;
 
 - refresh token;
 
 - restrict access to get customers operation from unauthenticated users;
+
+- roles USER and ADMIN;
 
 - restrict access to delete customer and update customer operations from unauthenticated users and customers with USER role;
 
@@ -61,3 +61,4 @@ $ npm run start:dev
 
 Access the swagger documentation by going to the url: http://localhost:8080/api
 Access the GraphQL playground by going to the url: http://localhost:8080/graphql
+Start the UI for the prisma database with the command: npx prisma studio
