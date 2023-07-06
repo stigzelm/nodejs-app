@@ -2,7 +2,10 @@ import { Args, Query, Resolver, Mutation } from '@nestjs/graphql';
 import { Customer } from 'lib/entities/customer.entity';
 import { CustomerService } from './customer.service';
 import { GetCustomersInput, GetCustomerInput, CreateCustomerInput, UpdateCustomerInput, DeleteCustomerInput } from './dto/customer.input';
+import { UseGuards } from '@nestjs/common';
+import { AtGuard } from 'src/auth/guards';
 
+@UseGuards(AtGuard)
 @Resolver(() => Customer)
 export class CustomerResolver {
   constructor(private readonly customerService: CustomerService) {}

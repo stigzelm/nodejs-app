@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
+    AuthModule,
     CustomerModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -22,7 +23,6 @@ import { AuthModule } from './auth/auth.module';
       playground: true,
       introspection: true, // TODO update this so that it's off in production;
     }),
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
