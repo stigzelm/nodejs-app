@@ -32,6 +32,11 @@ export class AuthService {
             throw new UnauthorizedException();
         }
 
+        const isVerified = customer.verified;
+        if (!isVerified) {
+            throw new UnauthorizedException();
+        }
+
         const payload = {sub: customer.id, email: customer.email};
         const accessToken = await this.generateAccessToken(payload);
         const refreshToken = await this.generateRefreshToken(payload);
