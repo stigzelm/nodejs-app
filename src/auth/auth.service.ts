@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma.service';
 import { LoginInput, RegisterInput } from './dto/auth.input';
 import { CustomerService } from 'src/customer/customer.service';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,7 @@ export class AuthService {
             throw new UnauthorizedException();
         }
 
-        if (password !== customer.password) {
+        if (!bcrypt.compare(password, customer.password)) {
             throw new UnauthorizedException();
         }
 

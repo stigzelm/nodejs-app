@@ -1,6 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { GetCustomersInput, GetCustomerInput, CreateCustomerInput, UpdateCustomerInput, DeleteCustomerInput } from './dto/customer.input';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CustomerService {
@@ -36,7 +37,10 @@ export class CustomerService {
     if (existingCustomer) {
       throw new ConflictException('Email is already in use');
     }
-    
+
+    const hashedPassword = await bcrypt.hash(newCustomer.password, 10);
+    newCustomer.password = hashedPassword;
+
     return this.prisma.customer.create({ data: newCustomer });
   }
 
