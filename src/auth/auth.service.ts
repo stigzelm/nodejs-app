@@ -4,6 +4,14 @@ import { LoginInput, RegisterInput, RfTokenInput } from './dto/auth.input';
 import { CustomerService } from 'src/customer/customer.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import * as nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+    host: 'mail.smtpbucket.com',
+    port: 8025,
+    secure: false,
+    auth: null,
+});
 
 @Injectable()
 export class AuthService {
@@ -34,7 +42,7 @@ export class AuthService {
 
         const isVerified = customer.verified;
         if (!isVerified) {
-            throw new UnauthorizedException();
+            throw new UnauthorizedException('Account not verified');
         }
 
         const payload = {sub: customer.id, email: customer.email};
@@ -49,14 +57,21 @@ export class AuthService {
     async register(params: RegisterInput) {
         const newCustomer = await this.customerService.create(params);
 
-        const payload = {sub: newCustomer.id, email: newCustomer.email};
-        const accessToken = await this.generateAccessToken(payload);
-        const refreshToken = await this.generateRefreshToken(payload);
+        const verificationCode = await this.jwt.signAsync({email: newCustomer.email}, {
+            secret: process.env.JWT_SECRET,
+            expiresIn: '1d'
+        });
+        const activationUrl = `http://localhost:8080/auth/verify/${verificationCode}`;
 
-        await this.updateRtHash(newCustomer.id, refreshToken);
+        await transporter.sendMail({
+            from: 'martin.stigzelius@volvo.com',
+            to: newCustomer.email,
+            subject: 'Activate your account',
+            html: `<h1>That was easy!<h1><p>Please click below to activate your account</p><p><a href="${activationUrl}">Activate</a></p>`
+        });
 
         return {
-            message: "Register successfully"
+            message: "Registered successfully! An email with the activation instructions has been sent to the customers email."
         }
     }
 
