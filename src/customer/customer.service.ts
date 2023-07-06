@@ -38,7 +38,7 @@ export class CustomerService {
       throw new ConflictException('Email is already in use');
     }
 
-    const hashedPassword = await bcrypt.hash(newCustomer.password, 10);
+    const hashedPassword = await this.encrypt(newCustomer.password);
     newCustomer.password = hashedPassword;
 
     return this.prisma.customer.create({ data: newCustomer });
@@ -51,7 +51,7 @@ export class CustomerService {
     const customer = await this.findOne({ id });
 
     if ('password' in params) {
-      const hashedPassword = await bcrypt.hash(params.password, 10);
+      const hashedPassword = await this.encrypt(params.password);
       params.password = hashedPassword;
     }
 
@@ -73,4 +73,9 @@ export class CustomerService {
       }
     })
   }
+
+  async encrypt(string: string) {
+    return bcrypt.hash(string, 10);
+  }
+
 }
