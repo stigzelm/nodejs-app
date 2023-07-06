@@ -4,6 +4,8 @@ import { CustomerService } from './customer.service';
 import { GetCustomersInput, GetCustomerInput, CreateCustomerInput, UpdateCustomerInput, DeleteCustomerInput } from './dto/customer.input';
 import { UseGuards } from '@nestjs/common';
 import { AtGuard } from 'src/auth/guards';
+import { Roles } from 'src/auth/roles.decorator';
+import { Role } from '@prisma/client';
 
 @UseGuards(AtGuard)
 @Resolver(() => Customer)
@@ -30,12 +32,14 @@ export class CustomerResolver {
 
   // Update customer by id
   @Mutation(() => Customer)
+  @Roles(Role.ADMIN)
   async updateCustomer(@Args('data') data: UpdateCustomerInput) {
     return this.customerService.update(data);
   }
 
   // Delete customer by id or email
   @Mutation(() => Customer)
+  @Roles(Role.ADMIN)
   async deleteCustomer(@Args('data') data: DeleteCustomerInput) {
     return this.customerService.delete(data);
   }
